@@ -1,0 +1,11 @@
+{
+    "name": "Json Maker Tool",
+    "question-add-entry": "Do you want to add an entry ? (yes:y)",
+    "question-add-array-value": "Do you want to add an value in the array ? (yes:y)",
+    "question-entry-type": "What kind is your entry ? (Basic, list, object)",
+    "question-entry-name": "What's the name of this entry ?",
+    "question-entry-value": "What's the value of the entry ?",
+    "question-new-file": "Do you want to create a new JSON file ? (yes:y)",
+    "question-file-name": "What's the name of this file ?",
+    "yes": "y"
+}
