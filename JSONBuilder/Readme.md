@@ -7,10 +7,10 @@ This is a simple tool which allows you to generate your own JSON file. It genera
 The simple way to use it is to follow the indications. This tool uses a command prompt. This system is based on Question answers. There is a translation file ... up to you to add your own.
 
 Example of basic Json : \
-![alt text](https://github.com/Throows/Playground/blob/main/resouces/example.jpg?raw=true)
+![alt text](https://github.com/Throows/Playground/blob/main/JSONBuilder/resources/example.jpg?raw=true)
 
 Gives the result :\
-![alt text](https://github.com/Throows/Playground/blob/main/resouces/result.jpg?raw=true)
+![alt text](https://github.com/Throows/Playground/blob/main/JSONBuilder/resources/result.jpg?raw=true)
 
 ## Getting Started
 
