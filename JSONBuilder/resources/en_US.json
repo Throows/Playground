@@ -7,5 +7,6 @@
     "question-entry-value": "What's the value of the entry ?",
     "question-new-file": "Do you want to create a new JSON file ? (yes:y)",
     "question-file-name": "What's the name of this file ?",
+    "json-file-created": "Your JSON File has been created at : {}",
     "yes": "y"
 }

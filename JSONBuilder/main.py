@@ -1,8 +1,10 @@
 import sys, os
 import tomllib
-from lang import TextsLang
 import JsonBuilder as jBuilder
 import json
+import datetime
+from pathlib import Path
+from lang import TextsLang
 
 def boolFromInput(inputData : str, yesForLang : str):
     return (inputData.casefold().__contains__(yesForLang) and inputData.casefold() != "")
@@ -30,19 +32,19 @@ def askNewFile():
     textsDatas.printText("question-new-file")
     return boolFromInput(input(), textsDatas.getText("yes"))
 
-def askFileName():
+def askFilePath() -> Path:
     textsDatas.printText("question-file-name")
-    formatedInput = input().replace(" ", "_")
-    if not formatedInput.casefold().__contains__(".json"):
-        formatedInput = '.'.join(formatedInput, "json")
-    
-    # TODO BAD CODE Ugly
-    if formatedInput.casefold().__contains__("/"):
-        dirs = formatedInput.split("/")
-        for dir in dirs:
-            if not dir.casefold().__contains__(".json"):
-                os.mkdir(savePath + dir)
-    return formatedInput
+    rawFilePath = input()
+
+    filePath = Path(rawFilePath)
+    filePath = savePath / filePath
+    if not filePath.exists():
+        filePath.mkdir(parents= True)
+
+    if filePath.is_dir():
+        dateNow = datetime.datetime.now()
+        filePath = filePath / dateNow.strftime("Save_%m_%d_%Y-%H:%M.json")
+    return filePath
 
 def askEntryValue():
     textsDatas.printText("question-entry-value")
@@ -79,22 +81,23 @@ def addJsonEntry(obj : dict):
         EValue = askEntryValue()
         obj[EName] = EValue
 
-# ERROR cant add folder parent to the file
-def createNewFile(fileName : str):
+def createNewFile(filePath : Path):
     hasEntry  = True
     JSONObject = dict()
     while hasEntry :
         addJsonEntry(JSONObject)
         hasEntry = askOtherEntry()
 
-    with open(fileName, "w") as outfile:
+    with open(filePath.absolute(), "w") as outfile:
         json.dump(JSONObject, outfile, indent=4)
+    
+    textsDatas.printText("json-file-created", str(filePath))
 
 def main():
     newJsonFile = askNewFile()
     while newJsonFile:
-        fileName = askFileName()
-        createNewFile(fileName)
+        filePath = askFilePath()
+        createNewFile(filePath)
         newJsonFile = askNewFile()
 
 # Defining Entry Point
