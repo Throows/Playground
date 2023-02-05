@@ -64,19 +64,15 @@ def addJsonEntry(obj : dict) -> bool:
     EName = askEntryName()
     if EType == "Array":
         arrayVal = list()
-        newValue = True
-        while newValue:
+        value = askEntryValue()
+        while value != None:
+            arrayVal.append(value)
             value = askEntryValue()
-            if value != None:
-                arrayVal.append(value)
-            else:
-                newValue = False
         obj[EName] = arrayVal
     elif EType == "Dictionnary":
-        hasEntry  = True
         newDict = dict()
-        while hasEntry :
-            hasEntry = addJsonEntry(newDict)
+        while addJsonEntry(newDict) :
+            continue
         obj[EName] = newDict
     elif EType == "Basic":
         EValue = askEntryValue()
@@ -84,22 +80,18 @@ def addJsonEntry(obj : dict) -> bool:
     return True
 
 def createNewFile(filePath : Path):
-    hasEntry  = True
     JSONObject = dict()
-    while hasEntry :
-        hasEntry = addJsonEntry(JSONObject)
-
+    while addJsonEntry(JSONObject):
+        continue
     with open(filePath.absolute(), "w") as outfile:
         json.dump(JSONObject, outfile, indent=4)
     
     textsDatas.printText("json-file-created", str(filePath))
 
 def main():
-    newJsonFile = askNewFile()
-    while newJsonFile:
+    while askNewFile():
         filePath = askFilePath()
         createNewFile(filePath)
-        newJsonFile = askNewFile()
 
 # Defining Entry Point
 if __name__ == "__main__":
