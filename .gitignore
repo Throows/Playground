@@ -1,5 +1,8 @@
 .vscode
 venv
 __pycache__
-.code-workspace
+**.code-workspace
 .DS_Store
+*.xmake
+bin
+build
