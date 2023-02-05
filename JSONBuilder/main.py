@@ -1,28 +1,18 @@
-import sys, os
-import tomllib
-import JsonBuilder as jBuilder
-import json
-import datetime
+import sys, tomllib, JsonBuilder, json, datetime, lang
 from pathlib import Path
-from lang import TextsLang
-
-def boolFromInput(inputData : str, yesForLang : str):
-    return (inputData.casefold().__contains__(yesForLang) and inputData.casefold() != "")
 
 with open("config.ini", "rb") as conf:
     config = tomllib.load(conf)
 
-print("Python Version : " + sys.version)
-print("Software Version : " + config["version"])
+textsDatas = lang.TextsLang(config["LANG"]["language"])
 
-textsDatas = TextsLang(config["LANG"]["language"])
-savePath = config["SETTINGS"]["savePath"]
-print("------ " + textsDatas.getText("name") + " ------")
+def boolFromInput(inputData : str, yesForLang : str) -> bool:
+    return (inputData.casefold().__contains__(yesForLang) and inputData.casefold() != "")
 
 def askEntryType() -> str:
     textsDatas.printText("question-entry-type")
     typeStr = input()
-    return jBuilder.getJsonEntryType(typeStr)
+    return JsonBuilder.getJsonEntryType(typeStr)
 
 def askEntryName() -> str:
     textsDatas.printText("question-entry-name")
@@ -37,7 +27,7 @@ def askFilePath() -> Path:
     rawFilePath = input()
 
     filePath = Path(rawFilePath)
-    filePath = savePath / filePath
+    filePath = config["SETTINGS"]["savePath"] / filePath
     if not filePath.is_file() and len(filePath.suffix) == 0:
         dateNow = datetime.datetime.now()
         filePath = filePath / dateNow.strftime("Save_%m_%d_%Y-%H:%M.json")
@@ -50,8 +40,8 @@ def askEntryValue():
     valueStr = input()
     if len(valueStr) == 0:
         return None
-    typeJson = jBuilder.typeOfStrVal(valueStr)
-    return jBuilder.convertStrToType(typeJson, valueStr)
+    typeJson = JsonBuilder.typeOfStrVal(valueStr)
+    return JsonBuilder.convertStrToType(typeJson, valueStr)
 
 def askBoolAnswer(question : str) -> bool:
     textsDatas.printText(question)
@@ -88,11 +78,9 @@ def createNewFile(filePath : Path):
     
     textsDatas.printText("json-file-created", str(filePath))
 
-def main():
-    while askNewFile():
-        filePath = askFilePath()
-        createNewFile(filePath)
-
-# Defining Entry Point
-if __name__ == "__main__":
-    main()
+print("Python Version : " + sys.version)
+print("Software Version : " + config["version"])
+print("------ " + textsDatas.getText("name") + " ------")
+while askNewFile():
+    filePath = askFilePath()
+    createNewFile(filePath)
