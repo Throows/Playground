@@ -67,6 +67,11 @@ Contributors names and contact info : \
 (empty)
 
 ## Version History
+* 0.0.4
+    * Better file exeption handling
+    * Better navigation (with default value), removed new entry question
+* 0.0.2
+    * Use pathlib instead of OS lib for file.
 * 0.0.1
     * Initial Release
 
@@ -76,6 +81,4 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 ## Todo's
 
-* Better file handling
-* Faster navigation through the program
 * ADD TUI ? maybe later (https://github.com/bczsalba/pytermgui)
