@@ -1,24 +1,23 @@
 import json
-import os
+from pathlib import Path
 
-langFileFormat = "resources/{}.json"
-
+jsonPath = Path("resources")
 class TextsLang:
 
     lang = "en_US"
     langJSON = None
 
-    def __init__(self, lang):
-        if os.path.exists(langFileFormat.format(lang)):
-            langFilePath = langFileFormat.format(lang)
-            self.lang = lang
+    def __init__(self, lang : str):
+        langFilePath = jsonPath / (lang + ".json")
+        if not langFilePath.exists():
+            langFilePath = jsonPath / (self.lang + ".json")
         else:
-            langFilePath = langFileFormat.format(self.lang)
+            self.lang = lang
 
         with open(langFilePath, "rb") as langFile:
             self.langJSON = json.load(langFile)
         
-    def getText(self, key):
+    def getText(self, key) -> str:
         return self.langJSON[key]
 
     def printText(self, key : str, *kwargs):

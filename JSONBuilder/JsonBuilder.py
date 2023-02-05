@@ -2,7 +2,10 @@ import ast
 
 # Get the normalized entry type Basic (int, float, str), Array, Object
 def getJsonEntryType(strVal : str):
-    simpleType = "Basic"
+    if len(strVal) == 0:
+        simpleType = "None"
+    else :
+        simpleType = "Basic"
     if strVal.casefold().__contains__("list") or strVal.casefold().__contains__("array"):
         simpleType = "Array"
     elif strVal.casefold().__contains__("dict") or strVal.casefold().__contains__("obj"):

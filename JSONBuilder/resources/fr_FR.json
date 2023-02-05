@@ -1,7 +1,5 @@
 {
     "name": "Outil de Creation de Json",
-    "question-add-entry": "Voulez vous ajouter une entrée ? (oui:o)",
-    "question-add-array-value": "Voulez vous ajouter une valeur au tableau ? (oui:o)",
     "question-entry-type": "Quel est le type de cette entrée ? (Basic, list, object)",
     "question-entry-name": "Quel est le nom de cette entrée ?",
     "question-entry-value": "Quel est la valeur de cette entrée ?",

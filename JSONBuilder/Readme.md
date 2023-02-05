@@ -14,6 +14,14 @@ Gives the result :\
 
 ## Getting Started
 
+So you want to create your own json ?\
+just follow the questions asked by the program...\
+Few tips: 
+* Basic means simple json key/Value entry (Int, Float, String), this is a default option.
+* Array (aka list) create a list.
+* Object (aka obj, dict) create a dictionnary same as an object.
+
+Once you are done creating your complex json entry just type the key return (Entry name question) to end the scope and move the the parent one or end the file.
 ### Dependencies
 
 This Project is made with Python (3.11), Toml (0.10), VirtualEnv
