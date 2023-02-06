@@ -25,6 +25,10 @@ target("EmbeddingPython")
     end
 
     after_build(function (target) 
-        os.run("pip3 install -e .")
+        os.run("python3 setup.py bdist_wheel")
+        for _, filedir in ipairs(os.filedirs("$(projectdir)/dist/**")) do
+            local filename = path.filename(filedir)
+            os.run("python3 -m pip install dist/%s --force-reinstall", filename)
+        end
         os.cp("$(projectdir)/src/scripts/**", "$(projectdir)/bin/$(os)_$(arch)_$(mode)/scripts/")
     end)
