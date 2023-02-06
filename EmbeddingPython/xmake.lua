@@ -25,5 +25,6 @@ target("EmbeddingPython")
     end
 
     after_build(function (target) 
+        os.run("pip3 install -e .")
         os.cp("$(projectdir)/src/scripts/**", "$(projectdir)/bin/$(os)_$(arch)_$(mode)/scripts/")
     end)

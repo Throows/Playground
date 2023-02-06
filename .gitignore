@@ -6,3 +6,5 @@ __pycache__
 *.xmake
 bin
 build
+**.egg-info
+**.so
