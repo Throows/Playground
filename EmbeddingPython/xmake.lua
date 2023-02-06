@@ -23,3 +23,7 @@ target("EmbeddingPython")
     if is_mode("debug") then
         add_defines("DEBUG")
     end
+
+    after_build(function (target) 
+        os.cp("$(projectdir)/src/scripts/**", "$(projectdir)/bin/$(os)_$(arch)_$(mode)/scripts/")
+    end)
