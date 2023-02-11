@@ -2,6 +2,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 
+#include "DataClassExample.hpp"
+
 class PyEmbeddedApp
 {
 public:
@@ -11,9 +13,7 @@ public:
     void setup();
     int run();
 
-    // Not used as object for now
-    //void printText();
-
 private:
     pybind11::module_ myModule;
+    DataClassExample myDataClass;
 };

@@ -1,11 +1,9 @@
 import MyPyApp
 
-def addition(a, b):
-    callCAPI()
-    return a + b
-
-def substract(a, b):
-    return a - b
-
-def callCAPI():
-    MyPyApp.printText()
+def runScript(datas : MyPyApp):
+    print("Running script")
+    error = 0
+    id = datas.getId()
+    print("The object ID is: {}".format(id))
+    datas.setName("MyPyApp")
+    return error

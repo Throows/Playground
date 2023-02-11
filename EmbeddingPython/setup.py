@@ -3,7 +3,7 @@ import os, sys
 from distutils.core import setup, Extension
 from distutils import sysconfig
 
-cpp_args = ['-std=c++20', '-stdlib=libc++', '-I/opt/homebrew/Cellar/pybind11/2.10.3/include']
+cpp_args = ['-std=c++11', '-stdlib=libc++']
 
 ext_modules = [
     Extension(
@@ -16,7 +16,7 @@ ext_modules = [
 
 setup(
     name='MyPyApp',
-    version='0.0.1',
+    version='0.0.2',
     author='Romain Berthoule @ Throows',
     author_email='throowsdev@gmail.com',
     description='This is an example API',
