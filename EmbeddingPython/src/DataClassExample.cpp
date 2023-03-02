@@ -1,13 +1,10 @@
 #include "DataClassExample.hpp"
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
+#include <iostream>
 
 DataClassExample::DataClassExample(int id, std::string name)
     : m_id(id), m_name(name)
-{
-}
-
-DataClassExample::~DataClassExample()
 {
 }
 
@@ -23,6 +20,7 @@ std::string DataClassExample::getName()
 
 void DataClassExample::setName(std::string name)
 {
+    std::cout << "Set name to " << name << std::endl;
     this->m_name = name;
 }
 

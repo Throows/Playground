@@ -5,7 +5,7 @@ class DataClassExample
 {
 public:
     DataClassExample(int id, std::string name);
-    ~DataClassExample();
+    virtual ~DataClassExample() = default;
 
     int getId();
     std::string getName();

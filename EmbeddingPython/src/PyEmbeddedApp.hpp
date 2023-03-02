@@ -8,7 +8,7 @@ class PyEmbeddedApp
 {
 public:
     PyEmbeddedApp();
-    ~PyEmbeddedApp();
+    ~PyEmbeddedApp() { Py_Exit(0); }
 
     void setup();
     int run();
