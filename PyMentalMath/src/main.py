@@ -1,4 +1,5 @@
-import sys 
+import sys, random
+import game
 
 # --- Game displays ---
 def PrintOperationScreen():
@@ -30,7 +31,7 @@ def AskQuit():
     exit()
 
 def OperationToChoice(choiceNB: int) -> int:
-    return pow(2, choiceNB)
+    return pow(2, choiceNB - 1)
 
 def GetChoiceInput(minChoice: int, maxChoice: int, choice = None) -> int:
     userInput = input(">>> ") if choice is None else choice
@@ -72,33 +73,53 @@ def GetOperationInput() -> int:
         chosenOperation = OperationToChoice(int(userInput))
     else:
         chosenOperation = GetOperationInput()
-    return 30 if chosenOperation > 30 else chosenOperation
+    return 15 if chosenOperation > 15 else chosenOperation
 
-gameInfos = {}    
+gameSettings = {
+    "Difficulty": 1      # TODO
+}    
+
+gameStats = {
+    "RoundPlayed": 0,
+    "score": 0
+}
 
 def AskComplementarySettings(): 
-    if gameInfos["Mode"] == 1:
+    if gameSettings["Mode"] == 1:
         print("Enter the time in seconds : (enter to quit)")
-        gameInfos["TimeSec"] = GetChoiceInput(5, 600)
-    elif gameInfos["Mode"] == 2:
+        gameSettings["TimeSec"] = GetChoiceInput(5, 600)
+    elif gameSettings["Mode"] == 2:
         print("Enter the number of formula to solve : (enter to quit)")
-        gameInfos["Round"] = GetChoiceInput(1, 100)
-    elif gameInfos["Mode"] == 4:
+        gameSettings["Round"] = GetChoiceInput(1, 100)
+    elif gameSettings["Mode"] == 4:
         print("Enter the goal of good answer : (enter to quit)")
-        gameInfos["Goal"] = GetChoiceInput(1, 100)
+        gameSettings["Goal"] = GetChoiceInput(1, 100)
     else:
-        gameInfos["Indefinite"] = True
+        gameSettings["Indefinite"] = True
+
+def GoalReached() -> bool:
+    if gameSettings["Mode"] == 2:
+       return gameSettings["Round"] == gameStats["RoundPlayed"]
+    if gameSettings["Mode"] == 4:
+       return gameSettings["Goal"] == gameStats["score"]
+    return False
+    #TODO Timer
 
 def Play():
     print("\033c")
-    print(gameInfos)
+    while not GoalReached():
+        if game.AskOperation(gameSettings["Operations"], gameSettings["Difficulty"]):
+            gameStats["score"] += 1
+        gameStats["RoundPlayed"] += 1   
+
+    print("You ended with a score of {} out of {}".format(gameStats["score"], gameStats["RoundPlayed"]))    
 
 def Main() -> None:
     print("Welcome to PyMental Math By Romain Berthoule (v1.0)")
     PrintOperationScreen()
-    gameInfos["Operations"] = GetOperationInput()
+    gameSettings["Operations"] = GetOperationInput()
     PrintModeScreen()
-    gameInfos["Mode"] = GetChoiceInput(1, 4)
+    gameSettings["Mode"] = GetChoiceInput(1, 4)
     AskComplementarySettings()
 
     while True:
@@ -106,4 +127,5 @@ def Main() -> None:
         AskQuit()
 
 if __name__ == "__main__":
+    random.seed()
     Main()
