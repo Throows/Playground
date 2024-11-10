@@ -1,5 +1,15 @@
-import sys, random
+import random
 import game
+import time
+from enum import Enum
+from threading import Timer
+from keyboard import press
+
+class GameModes(Enum):
+    TIMER       = 1
+    ROUND_NB    = 2
+    INDEFINITE  = 3
+    GOAL        = 4
 
 # --- Game displays ---
 def PrintOperationScreen():
@@ -22,21 +32,27 @@ def PrintModeScreen():
     print("\t4 - Goal")
     print("Enter the number of your choice : (enter to quit)")
 
-def AskQuit():
-    print("Do you want to exit ? (any keys: yes, n: no)")
+def AskPlay():
+    print("Do you want to play ? (any keys: yes, n: no)")
     userInput = input(">>> ")
-    if "n" in userInput:
-        return
-    print("GoodBye !")
-    exit()
+    if "n" not in userInput:
+        PrintOperationScreen()
+        gameSettings["Operations"] = GetOperationInput()
+        PrintModeScreen()
+        gameSettings["Mode"] = GetModeInput()
+        AskComplementarySettings()
+    else:
+        print("GoodBye !")
+        exit()
 
 def OperationToChoice(choiceNB: int) -> int:
     return pow(2, choiceNB - 1)
 
+# Generic int input function
 def GetChoiceInput(minChoice: int, maxChoice: int, choice = None) -> int:
     userInput = input(">>> ") if choice is None else choice
     if userInput == "":
-        AskQuit()
+        AskPlay()
         return GetChoiceInput(minChoice, maxChoice)
     try:
         userInput = int(userInput)
@@ -53,7 +69,7 @@ def GetChoiceInput(minChoice: int, maxChoice: int, choice = None) -> int:
 def GetOperationInput() -> int:
     userInput = input(">>> ")
     if userInput == "":
-        AskQuit()
+        AskPlay()
         return GetOperationInput()
     chosenOperation = 0
     if "," in userInput :
@@ -75,38 +91,55 @@ def GetOperationInput() -> int:
         chosenOperation = GetOperationInput()
     return 15 if chosenOperation > 15 else chosenOperation
 
+def GetModeInput() -> GameModes:
+    result = GetChoiceInput(1, 4)
+    return GameModes(result)
+
 gameSettings = {
-    "Difficulty": 1      # TODO
+    "Difficulty": 1,      # TODO
+    "Mode": GameModes.INDEFINITE
 }    
 
 gameStats = {
     "RoundPlayed": 0,
-    "score": 0
+    "score": 0,
+    "Timesup": False
 }
 
 def AskComplementarySettings(): 
-    if gameSettings["Mode"] == 1:
+    if gameSettings["Mode"] == GameModes.TIMER:
         print("Enter the time in seconds : (enter to quit)")
         gameSettings["TimeSec"] = GetChoiceInput(5, 600)
-    elif gameSettings["Mode"] == 2:
+    elif gameSettings["Mode"] == GameModes.ROUND_NB:
         print("Enter the number of formula to solve : (enter to quit)")
         gameSettings["Round"] = GetChoiceInput(1, 100)
-    elif gameSettings["Mode"] == 4:
+    elif gameSettings["Mode"] == GameModes.GOAL:
         print("Enter the goal of good answer : (enter to quit)")
         gameSettings["Goal"] = GetChoiceInput(1, 100)
     else:
-        gameSettings["Indefinite"] = True
+        gameSettings["Mode"] = GameModes.INDEFINITE
 
 def GoalReached() -> bool:
-    if gameSettings["Mode"] == 2:
+    if gameSettings["Mode"] == GameModes.ROUND_NB:
        return gameSettings["Round"] == gameStats["RoundPlayed"]
-    if gameSettings["Mode"] == 4:
+    if gameSettings["Mode"] == GameModes.GOAL:
        return gameSettings["Goal"] == gameStats["score"]
+    if gameSettings["Mode"] == GameModes.TIMER:
+        return gameStats["Timesup"]
     return False
-    #TODO Timer
+
+def SetTimeup():
+    gameStats["Timesup"] = True
+    print("")
+    press('enter')
 
 def Play():
     print("\033c")
+    gameStats["Timer"] = time.time()
+    t = Timer(gameSettings["TimeSec"], SetTimeup)
+    if gameSettings["Mode"] == GameModes.TIMER:
+        t.start()
+
     while not GoalReached():
         if game.AskOperation(gameSettings["Operations"], gameSettings["Difficulty"]):
             gameStats["score"] += 1
@@ -116,15 +149,9 @@ def Play():
 
 def Main() -> None:
     print("Welcome to PyMental Math By Romain Berthoule (v1.0)")
-    PrintOperationScreen()
-    gameSettings["Operations"] = GetOperationInput()
-    PrintModeScreen()
-    gameSettings["Mode"] = GetChoiceInput(1, 4)
-    AskComplementarySettings()
-
     while True:
+        AskPlay()
         Play()
-        AskQuit()
 
 if __name__ == "__main__":
     random.seed()

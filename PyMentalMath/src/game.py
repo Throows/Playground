@@ -2,7 +2,6 @@ import random
 
 def AskOperation(mode: int, difficulty: int) -> bool:
     availableOperation = []
-    print(bin(mode))
     for i in range(4):
         if (mode >> i) & 1:
             availableOperation.append(i)
